@@ -38,7 +38,7 @@ Make sure you have Rstudio and R installed:
 
 ```{r image_grob007, fig.show = "hold", out.width = "50%", fig.align = "default", echo=FALSE}
 
-knitr::include_graphics("Screenshot 2025-12-02 161014.jpg")
+knitr::include_graphics("https://github.com/KiranLDA/MSc_Protected_Areas_2025/blob/main/Screenshot%202025-12-02%20161014.jpg?raw=true")
 
 ```
 

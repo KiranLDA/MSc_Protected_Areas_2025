@@ -1,7 +1,7 @@
 ---
 title: "Protected Areas Practical"
 author: "Kiran Dhanjal-Adams"
-date: "2024-11-29"
+date: "2025-12-02"
 output:
   rmdformats::robobook   
 ---
@@ -38,7 +38,7 @@ Make sure you have Rstudio and R installed:
 
 ```{r image_grob007, fig.show = "hold", out.width = "50%", fig.align = "default", echo=FALSE}
 
-knitr::include_graphics("Screenshot 2025-12-02 161014.jpg")
+knitr::include_graphics("https://github.com/KiranLDA/MSc_Protected_Areas_2025/blob/main/Screenshot%202025-12-02%20161014.jpg")
 
 ```
 
@@ -536,3 +536,26 @@ plot(sr, main = "without cost", axes = FALSE)
 par(mfrow=c(1,1))# go back to only 1 plot
 
 ```
+
+# Bonus points: Using your own SDM
+
+We will not tell you how to do this, but you should have all the tools you need to do this on your own, and it would be a great example of how to apply what you have learned in this practical to your assignment.
+
+You could try to find areas that capture 30% of your own SDM species for the least cost. To do this, the most important step will be to get your species distribution into the same resolution and extent as the cost layer. This is covered in the section entitled `Resolution`. 
+
+1. Import your species distribution raster using `terra::rast()` (you could name it `my_species`). prioritizr allows you to use both probability maps and binary maps. You could compare both if you want to see whether that changes the areas that seem important.
+2. Change the resolution of your distribution data to match the cost layer using `terra::aggregate`
+3. Check the resolution and extent of your species layer using `res()` and `ext()`, and make sure they match the cost layer. You can use `terra::crop()` or `terra::extend()` to change the extent if needed.
+4. Replace `features = species` with `features = my_species` in the `problem()` formulation of prioritizr
+5. Now decide:
+  - do you want to use a budget and maximise biodiversity using `add_min_shortfall_objective`, or
+  - do you want to minimise cost while meeting biodiversity targets using `add_min_set_objective`?
+  - do you want to include protected areas using `add_locked_in_constraints` or do you want to see where they are prioritised independently?
+  - do you want to lock out heavily used areas using `add_locked_out_constraints`?
+  - do you want to make protected areas lumped together by adding boundary penalties  `add_boundary_penalties`?
+6. See where the prioritisation suggests protecting land for your species! What do you notice? what tradeoffs are you making and why?
+
+# Find out more
+
+prioritizr has many very useful help pages - do your own search to find out more about the functions used here and others that you can use to modify your prioritisation.
+- [prioritizr main page](https://prioritizr.net/)
