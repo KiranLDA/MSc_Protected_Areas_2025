@@ -103,6 +103,10 @@ par(mfrow=c(1,1)) # make sure the next plot is just 1 plot
 # Spatial extent sanity checks
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Projection - Do they look the same?
+crs(cost, describe=T)
+crs(species, describe=T)
+
 ## Extent - Do they look the same?
 ext(cost)
 ext(species)

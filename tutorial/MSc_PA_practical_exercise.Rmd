@@ -36,9 +36,9 @@ Make sure you have Rstudio and R installed:
 4. Save the file to your computer in your chosen location.
 5. Once downloaded, unzip/extract all files in the ZIP file.
 
-```{r image_grob007, fig.show = "hold", out.width = "50%", fig.align = "default", echo=FALSE}
+```{r image_grob007, fig.show = "hold", out.width = "80%", fig.align = "default", echo=FALSE}
 
-knitr::include_graphics("https://github.com/KiranLDA/MSc_Protected_Areas_2025/blob/main/Screenshot%202025-12-02%20161014.jpg")
+knitr::include_graphics("https://github.com/KiranLDA/MSc_Protected_Areas_2025/blob/main/tutorial/download.png?raw=true")
 
 ```
 
@@ -56,11 +56,21 @@ install.packages("highs", repos = "https://cran.rstudio.com/")
 
 # Exercise 1
 
-While the packages install, we can do this exercise to understand the value of using an optimization. Let's first try to solve [this problem](https://marxansolutions.org/training/#:~:text=Conservation%20Planning%20Exercise,with%20the%20lowest%20possible%20cost.) by selecting cells for conservation to meet targets for 3 species for the least cost. Once you meet the target, you can compare your solution with the optimal solution.
+While the packages install, we can do this exercise to understand the value of using an optimization. Let's first try to solve [this problem](https://marxansolutions.org/training/#:~:text=Conservation%20Planning%20Exercise,with%20the%20lowest%20possible%20cost.) under "Conservation Planning Excercise" by selecting cells for conservation to meet targets for 3 species for the least cost. Once you meet the target, you can compare your solution with the optimal solution.
+
+Imagine having to do that for thousands of cells... this is why we use software to solve these problems.
+
+```{r image_grob008, fig.show = "hold", out.width = "80%", fig.align = "default", echo=FALSE}
+
+knitr::include_graphics("https://github.com/KiranLDA/MSc_Protected_Areas_2025/blob/main/Screenshot%202025-12-02%20163221.jpg?raw=true")
+
+```
+
+
 
 # Start the practical in R
 
-Now get the code for the practical from Go to `code/02_practical.R` 
+Now get the code for the practical from `code/02_practical.R` 
 
 
 # Load Packages
@@ -73,9 +83,9 @@ library(terra)
 
 # Load the files
 
-We are going to be using the species that you are mapping as part of the Species Distribution Modelling (SDM) class. We are going to use the binary presence/absence outputs where the probability of a species presence has been translated into a yes/no.
+We are going to be using Species Distribution Modelling (SDM) data from students last year. We are going to use the binary presence/absence outputs where the probability of a species presence has been translated into a yes/no.
 
-Each layer describes the spatial distribution of a feature. Here, our feature data correspond to different plant species. Specifically, if the cell (or planning unit) has a 1, as species is predicted to be present in it based on the SDM. If the cell has a 0, then it is predicted to be absent.
+Each layer describes the spatial distribution of a feature. Here, our feature data correspond to different plant species. Specifically, if the cell (or planning unit) has a 1, a species is predicted to be present in it based on the SDM. If the cell has a 0, then it is predicted to be absent.
 
 
 ## Load species distributions
@@ -140,24 +150,25 @@ par(mfrow=c(1,1))
 
 Why should I care about the spatial extent of my data or it's projection?
 
-The world is a sphere, and for us to visualise it on paper as a rectangle, we need to make some transformation or "projections". This can lead to some regions becoming more stretched than others, and some regions being more compressed. The most common projection, the Mercator projection (left), makes the northern hemisphere look larger than the southern hemisphere. We can have equal area projections (right) such as Winkel-Tripel that correct for this, but then make places like New Zealand look very squashed. No projection is perfect.
+The world is a sphere, and for us to visualise it on paper as a rectangle, we need to make some transformation or "projections". This can lead to some regions becoming more stretched than others, and some regions being more compressed. The most common projection, the Mercator projection (top left), makes the northern hemisphere look larger than the southern hemisphere. We can have equal area projections (middle right) such as Molleweide that correct for this, but then make places like New Zealand look very squashed. Many datasets each use different projections, so it is important to make sure all the different files have the same extent (x and y limits), and the same resolution (pixel size)
 
 
 
-```{r image_grob8, fig.show = "hold", out.width = "50%", fig.align = "default", echo=FALSE}
+```{r image_grob8, fig.show = "hold", out.width = "80%", fig.align = "default", echo=FALSE}
 
-knitr::include_graphics("https://i.guim.co.uk/img/static/Guardian/global/gallery/2009/apr/17/geography/mercator-5130.jpg?w=1010&q=20&auto=format&usm=12&fit=max&dpr=2&s=7fee64700cc5a92d3ffd1ad6306ad53e")
-
-```
-
-```{r image_groba, fig.show = "hold", out.width = "50%", fig.align = "default", echo=FALSE}
-
-knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/9/91/Winkel_triple_projection_SW.jpg")
+knitr::include_graphics("https://www.geoawesome.com/wp-content/uploads/2022/03/projections.jpg")
 
 ```
 
 
-Many datasets each use different projections, so it is important to make sure all the different files have the same extent (x and y limits), and the same resolution (pixel size)
+## Projection
+
+```{r projection}
+crs(cost, describe=T)
+crs(species, describe=T)
+```
+
+The datasets have the same projection. However, if they did not, we can use `project(species, cost)` to reproject the species data to match the cost data (or vice versa).
 
 ## Extent
 ```{r extent}
@@ -169,7 +180,7 @@ Do they look the same?
 
 ## Resolution
 
-Resolution is also important as we need the cells to all line-up to be able to match them and make calulations.
+Resolution is also important as we need the cells to all line-up to be able to match them and make calculations.
 
 ```{r image_grobsi, fig.show = "hold", out.width = "50%", fig.align = "default", echo=FALSE}
 knitr::include_graphics("https://docs.safe.com/fme/html/FME-Form-Documentation/FME-Transformers/Examples/Raster/rasterresampler_small_491x272.png")
@@ -371,15 +382,13 @@ eval_n_summary(p2, s2)
 
 # calculate the total cost of the solution
 eval_cost_summary(p2, s2)
-# Note that the scenario is more expensive - why do you think that is?
-# It is likely the first scenario has no constraints and protects the cheapest sites first 
-# that meet the biodiversity target. However, some of these sites are already protected in scenario 2, 
-# so the algorithm has to consider sites that are not already protected, which are more expensive
-# in order to meet the conservation scenario.
-# The more we protect, the more expensive it gets because we use the cheaper sites at the
-# beginning, and add more and more costly sites as we go on
+```
 
+Note that the scenario 2 is more expensive - why do you think that is?
 
+It is likely the first scenario has no constraints and protects the cheapest sites first that meet the biodiversity target. However, some of these sites are already protected in scenario 2, so the algorithm has to consider other sites to meet the conservation target. The current PA system may also be sub optimal (for instance, protecting some ecosystems/species more than others), so the algorithm has to compensate by protecting more expensive sites to meet the same biodiversity targets for under-represented ecosystems/species. 
+
+```{r}
 # calculate target coverage for the solution
 p2_target_coverage <- eval_target_coverage_summary(p2, s2)
 print(p2_target_coverage)
@@ -421,6 +430,7 @@ print(mean(p3_target_coverage$met) * 100)
 
 What is the first thing you notice? It's much longer... This is because it has to compute a lot more relationships between cells/planning units.
 
+What is the second thing you notice? The protected areas are huge. It's important to consider whether very large protected areas make sense in human landscapes, as they could impact livelihoods and displace people. However, large protected areas can also be easier to manage and patrol, and can protect wide-ranging species better. It's important to think about these things when designing protected area networks.
 
 # Calculate importance scores
 
@@ -471,7 +481,7 @@ plot(s3, main = "With PAs + Boundary layer", axes = FALSE)
 par(mfrow=c(1,1))# go back to only 1 plot
 ```
 
-Notice that it reality it doesn't change much because we are using the same data to derive the cost layer and the locked out layer. However locking areas out of the prioritisation means that some "expensive" but biodiverse sites cannot be protected, and need to be replaced with more and cheaper planning units, meaning that more land has to be protected in compensation...
+Notice that in reality it doesn't change much because we are using the same data to derive the cost layer and the locked out layer. However locking areas out of the prioritisation means that some "expensive" but biodiverse sites cannot be protected, and need to be replaced with many cheaper planning units, meaning that more land has to be protected to compensate.
 
 ```
 # calculate target coverage for the solution
@@ -539,23 +549,31 @@ par(mfrow=c(1,1))# go back to only 1 plot
 
 # Bonus points: Using your own SDM
 
-We will not tell you how to do this, but you should have all the tools you need to do this on your own, and it would be a great example of how to apply what you have learned in this practical to your assignment.
+**We will not help you with this - you need to develop the code yourself**
 
-You could try to find areas that capture 30% of your own SDM species for the least cost. To do this, the most important step will be to get your species distribution into the same resolution and extent as the cost layer. This is covered in the section entitled `Resolution`. 
+As a bonus, you could try to find areas that capture 30% of your own SDM species for the least cost. Or capture as much of your species as possible within a budget. This can help you discuss conservation implications and trade-offs for your species.
 
-1. Import your species distribution raster using `terra::rast()` (you could name it `my_species`). prioritizr allows you to use both probability maps and binary maps. You could compare both if you want to see whether that changes the areas that seem important.
-2. Change the resolution of your distribution data to match the cost layer using `terra::aggregate`
-3. Check the resolution and extent of your species layer using `res()` and `ext()`, and make sure they match the cost layer. You can use `terra::crop()` or `terra::extend()` to change the extent if needed.
-4. Replace `features = species` with `features = my_species` in the `problem()` formulation of prioritizr
-5. Now decide:
+Here are the steps you need to follow:
+
+1. Import your species distribution raster using `terra::rast()` (you could name it `my_species`). `prioritizr` allows you to use both probability maps and binary maps. You can test both if you want to see how it changes what areas you prioritise.
+
+2. Check you have the right projection, resolution and extent using `crs()`, `res()` and `ext()`. 
+  - If the projection is not the same, you can use `my_species <- project(my_species, cost)` to reproject your species layer to match the cost layer.
+  - If the resolution is not the same (very likely as your SDM will be very fine resolution) you can use `aggregate(my_species, fact = 12, fun = "modal", na.rm = T)` to get the same resolution. I am guessing 12 will work, but if it does not, you can estimate factor using `factor <- res(cost)[1] / res(my_species)[1]`
+  - If the extent is not the same, you can use `crop(my_species, cost)` if my_species is bigger than cost, or `extend(my_species, cost)` if my_species is smaller than cost.
+  
+3. Replace `features = species` with `features = my_species` in the `problem()` formulation of prioritizr and anywhere else in the code where it might be needed.
+
+4. Now decide:
   - do you want to use a budget and maximise biodiversity using `add_min_shortfall_objective`, or
   - do you want to minimise cost while meeting biodiversity targets using `add_min_set_objective`?
   - do you want to include protected areas using `add_locked_in_constraints` or do you want to see where they are prioritised independently?
   - do you want to lock out heavily used areas using `add_locked_out_constraints`?
-  - do you want to make protected areas lumped together by adding boundary penalties  `add_boundary_penalties`?
-6. See where the prioritisation suggests protecting land for your species! What do you notice? what tradeoffs are you making and why?
+  - do you want to make protected areas lumped together by adding boundary penalties `add_boundary_penalties`?
+  
+5. See where the prioritisation suggests protecting land for your species - What do you notice? What trade-offs are you making and why? How does the SDM thresholding affect the priority areas?
 
 # Find out more
 
-prioritizr has many very useful help pages - do your own search to find out more about the functions used here and others that you can use to modify your prioritisation.
-- [prioritizr main page](https://prioritizr.net/)
+`prioritizr` has many very useful help pages - feel free to explore and do your own research to find out more about what you can do on the 
+[prioritizr main page](https://prioritizr.net/)
