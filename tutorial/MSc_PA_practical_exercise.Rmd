@@ -547,13 +547,13 @@ par(mfrow=c(1,1))# go back to only 1 plot
 
 ```
 
-# Bonus points: Using your own SDM
+# Going further: Using your own SDM
 
-**We will not help you with this - you need to develop the code yourself**
+**This is not part of the practical**
 
-As a bonus, you could try to find areas that capture 30% of your own SDM species for the least cost. Or capture as much of your species as possible within a budget. This can help you discuss conservation implications and trade-offs for your species.
+Later, once you have your SDM you could try to find areas that capture 30% of your own species for the least cost. Or capture as much of your species as possible within a budget. This can help us think about conservation implications and trade-offs for our species.
 
-Here are the steps you need to follow:
+Here are the steps you would need to achieve this:
 
 1. Import your species distribution raster using `terra::rast()` (you could name it `my_species`). `prioritizr` allows you to use both probability maps and binary maps. You can test both if you want to see how it changes what areas you prioritise.
 
