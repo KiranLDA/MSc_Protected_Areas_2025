@@ -55,7 +55,7 @@ install.packages("highs", repos = "https://cran.rstudio.com/")
 
 # Exercise 1
 
-While the packages install, we can do this exercise to understand the value of using an optimization. Let's first try to solve [this problem](https://marxansolutions.org/training/#:~:text=Conservation%20Planning%20Exercise,with%20the%20lowest%20possible%20cost.) under "Conservation Planning Excercise" by selecting cells for conservation to meet targets for 3 species for the least cost. Once you meet the target, you can compare your solution with the optimal solution.
+While the packages install, we can do this exercise to understand the value of using an optimization. Let's first try to solve [this problem](https://marxansolutions.org/training/#:~:text=Conservation%20Planning%20Exercise,with%20the%20lowest%20possible%20cost.) under "Conservation Planning Exercise" by selecting cells for conservation to meet targets for 3 species for the least cost. Once you meet the target, you can compare your solution with the optimal solution.
 
 Imagine having to do that for thousands of cells... this is why we use software to solve these problems.
 
