@@ -558,7 +558,7 @@ par(mfrow=c(1,1))# go back to only 1 plot
 ```
 
 
-# Bonus points: Using your own SDM
+# Going further: Using your own SDM
 
 **This is not part of the practical**
 

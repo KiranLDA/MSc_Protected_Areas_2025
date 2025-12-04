@@ -7,7 +7,7 @@
 
 ## Download the practical data
 
-1. Go to https://github.com/KiranLDA/MSc_Protected_Areas
+1. Go to https://github.com/KiranLDA/MSc_Protected_Areas_2025
 2. Click on the big green button 'CODE'.
 3. Select 'Download ZIP'.
 4. Save the file to your computer in your chosen location.
@@ -15,7 +15,7 @@
 
 ## Packages
 
-1. Open the R project `MSc_Protected_Areas.Rproj`
+1. Open the R project `MSc_Protected_Areas_2025.Rproj`
 2. Go to `code/01_installation.R` to get a list of R packages to install and run that code. They are also copied below:
 
 ```r 
